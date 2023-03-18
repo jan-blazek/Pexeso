@@ -71,9 +71,13 @@ onMounted(() => {
   generateCardValues();
 })
 watch(rows, () => {
+  correct.value = 0;
+  wrong.value = 0;
   generateCardValues();
 })
 watch(cols, () => {
+  correct.value = 0;
+  wrong.value = 0;
   generateCardValues();
 })
 
