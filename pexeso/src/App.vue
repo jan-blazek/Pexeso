@@ -54,14 +54,14 @@
     </tr>
     <tr>
       <td>Úspěšnost:</td>
-      <td>&nbsp;&nbsp;<span id="body_uspesnost">{{correct / wrong}}%</span></td>
+      <td>&nbsp;&nbsp;<span id="body_uspesnost">{{successRate}}%</span></td>
     </tr>
   </table>
 </template>
 
 <script setup lang="ts">
 import VueCard from "@/components/vue-card.vue";
-import {onMounted, ref, watch} from "vue";
+import {computed, onMounted, ref, watch} from "vue";
 import type { Ref } from 'vue'
 
 const rows = ref(4);
@@ -80,6 +80,13 @@ watch(rows, () => {
 })
 watch(cols, () => {
   generateCardValues();
+})
+
+const successRate = computed(() => {
+  if (correct.value === 0 && wrong.value === 0) {
+    return 0;
+  }
+  return Math.round((correct.value / (correct.value + wrong.value)) * 100);
 })
 
 function generateCardValues() {
