@@ -1,4 +1,7 @@
 <template>
+  {{values}}
+  {{rows}}
+  {{cols}}
   <h1>PEXESO</h1>
   <!--Popočet řádků-->
   Počet řádků:
@@ -23,13 +26,16 @@
   <br><br>
 
   <div>
-    <template v-for="row in rows" :key="row">
-      <vue-card
-          v-for="col in cols"
-          :key="col"
-          :value="values[(row - 1) * cols + (col - 1)]"
-      />
-      <br>
+    <template v-if="values.length > 0">
+      <template v-for="row in rows" :key="row">
+        <vue-card
+            v-for="col in cols"
+            :key="col"
+            :value="values[(row - 1) * cols + (col - 1)]"
+            @turn="turnCard"
+        />
+        <br>
+      </template>
     </template>
   </div>
 
@@ -37,18 +43,18 @@
   <table>
     <tr>
       <td>Správně:</td>
-      <td>&nbsp;&nbsp;<span id="body_spravne">0</span></td>
+      <td>&nbsp;&nbsp;<span id="body_spravne">{{correct}}</span></td>
     </tr>
     <tr>
       <td>Špatně:</td>
-      <td>&nbsp;&nbsp;<span id="body_spatne">0</span></td>
+      <td>&nbsp;&nbsp;<span id="body_spatne">{{wrong}}</span></td>
     </tr>
     <tr>
       <td>&nbsp;</td>
     </tr>
     <tr>
       <td>Úspěšnost:</td>
-      <td>&nbsp;&nbsp;<span id="body_uspesnost">0.0%</span></td>
+      <td>&nbsp;&nbsp;<span id="body_uspesnost">{{correct / wrong}}%</span></td>
     </tr>
   </table>
 </template>
@@ -63,6 +69,9 @@ const cols = ref(4);
 
 let values: Ref<number[]> = ref([]);
 
+const correct = ref(0);
+const wrong = ref(0);
+
 onMounted(() => {
   generateCardValues();
 })
@@ -75,14 +84,49 @@ watch(cols, () => {
 
 function generateCardValues() {
   values.value = [];
-  for (let x = 0; x < (cols.value * rows.value) / 2; x++) {
+  const maxCardValue = (cols.value * rows.value) / 2
+  for (let x = 0; x < maxCardValue; x++) {
     values.value.push(x);
     values.value.push(x);
   }
-  values.value.sort(randomSort); // náhodně setřídíme
+  values.value.sort(randomSort);
 }
 function randomSort() {
   return 0.5 - Math.random();
+}
+
+let isTimeout = false;
+let previousValue = -1;
+let previousIsShown: Ref<boolean> = ref(false);
+let previousIsFound: Ref<boolean> = ref(false);
+function turnCard(value: number, isShown: Ref<boolean>, isFound: Ref<boolean>) {
+  if (isTimeout || isFound.value) return;
+  isShown.value = true;
+
+  if (previousValue === -1) {
+    previousValue = value;
+    previousIsShown = isShown;
+    previousIsFound = isFound;
+    return;
+  }
+
+  if (value === previousValue) {
+    correct.value++;
+
+    previousIsFound.value = true;
+    isFound.value = true;
+  } else {
+    wrong.value++;
+
+    isTimeout = true;
+    setTimeout(() => {
+      previousIsShown.value = false;
+      isShown.value = false;
+      isTimeout = false;
+    }, 1000);
+  }
+
+  previousValue = -1;
 }
 </script>
 
