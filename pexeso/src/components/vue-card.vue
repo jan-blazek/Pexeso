@@ -1,7 +1,6 @@
 <template>
   <button
       @click="turnCard"
-      :value="value"
       :style="{ backgroundColor: cardColor }"
   >
     {{isShown ? value : "x"}}
