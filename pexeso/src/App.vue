@@ -1,20 +1,17 @@
 <template>
-  {{values}}
   {{rows}}
   {{cols}}
   <h1>PEXESO</h1>
-  <!--Popočet řádků-->
   Počet řádků:
-  <select v-model="rows" name="radky">
+  <select v-model.number="rows" name="radky">
     <option value="2">2</option>
     <option value="4" selected="">4</option>
     <option value="6">6</option>
     <option value="8">8</option>
   </select>
 
-  <!--Popočet sloupců-->
   Počet sloupců:
-  <select v-model="cols" name="sloupce">
+  <select v-model.number="cols" name="sloupce">
     <option value="2">2</option>
     <option value="3">3</option>
     <option value="4" selected="">4</option>
