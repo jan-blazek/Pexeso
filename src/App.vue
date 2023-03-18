@@ -111,8 +111,8 @@ function turnCard(value: number, isShown: Ref<boolean>, isFound: Ref<boolean>) {
 
   if (previousValue === -1) {
     previousValue = value;
-    previousIsShown.value = isShown;
-    previousIsFound.value = isFound;
+    previousIsShown = isShown;
+    previousIsFound = isFound;
     return;
   }
 
