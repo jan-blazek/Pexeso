@@ -1,6 +1,4 @@
 <template>
-  {{rows}}
-  {{cols}}
   <h1>PEXESO</h1>
   Počet řádků:
   <select v-model.number="rows" name="radky">
