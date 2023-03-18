@@ -22,11 +22,13 @@
 
   <br><br>
 
-  <div id="hraci_plocha">
-    <template v-for="index in rows" :key="index">
-      <template v-for="col in cols" :key="col">
-        <vue-card />
-      </template>
+  <div>
+    <template v-for="row in rows" :key="row">
+      <vue-card
+          v-for="col in cols"
+          :key="col"
+          :value="values[(row - 1) * cols + (col - 1)]"
+      />
       <br>
     </template>
   </div>
@@ -53,10 +55,35 @@
 
 <script setup lang="ts">
 import VueCard from "@/components/vue-card.vue";
-import {ref} from "vue";
+import {onMounted, ref, watch} from "vue";
+import type { Ref } from 'vue'
 
 const rows = ref(4);
 const cols = ref(4);
+
+let values: Ref<number[]> = ref([]);
+
+onMounted(() => {
+  generateCardValues();
+})
+watch(rows, () => {
+  generateCardValues();
+})
+watch(cols, () => {
+  generateCardValues();
+})
+
+function generateCardValues() {
+  values.value = [];
+  for (let x = 0; x < (cols.value * rows.value) / 2; x++) {
+    values.value.push(x);
+    values.value.push(x);
+  }
+  values.value.sort(randomSort); // náhodně setřídíme
+}
+function randomSort() {
+  return 0.5 - Math.random();
+}
 </script>
 
 <style scoped>
