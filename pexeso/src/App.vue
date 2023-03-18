@@ -1,47 +1,63 @@
-<script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+  <h1>PEXESO</h1>
+  <!--Popočet řádků-->
+  Počet řádků:
+  <select v-model="rows" name="radky">
+    <option value="2">2</option>
+    <option value="4" selected="">4</option>
+    <option value="6">6</option>
+    <option value="8">8</option>
+  </select>
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
+  <!--Popočet sloupců-->
+  Počet sloupců:
+  <select v-model="cols" name="sloupce">
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4" selected="">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+    <option value="7">7</option>
+  </select>
 
-  <main>
-    <TheWelcome />
-  </main>
+  <br><br>
+
+  <div id="hraci_plocha">
+    <template v-for="index in rows" :key="index">
+      <template v-for="col in cols" :key="col">
+        <vue-card />
+      </template>
+      <br>
+    </template>
+  </div>
+
+  <br>
+  <table>
+    <tr>
+      <td>Správně:</td>
+      <td>&nbsp;&nbsp;<span id="body_spravne">0</span></td>
+    </tr>
+    <tr>
+      <td>Špatně:</td>
+      <td>&nbsp;&nbsp;<span id="body_spatne">0</span></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td>Úspěšnost:</td>
+      <td>&nbsp;&nbsp;<span id="body_uspesnost">0.0%</span></td>
+    </tr>
+  </table>
 </template>
 
+<script setup lang="ts">
+import VueCard from "@/components/vue-card.vue";
+import {ref} from "vue";
+
+const rows = ref(4);
+const cols = ref(4);
+</script>
+
 <style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
 </style>
