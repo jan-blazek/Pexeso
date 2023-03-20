@@ -1,3 +1,6 @@
+#app {
+    text-align: center;
+}
 button {
     background-color: #008CBA;
     /* Green */
@@ -41,4 +44,7 @@ select {
 
 body {
     margin: 20px;
+}
+table {
+    margin: auto;
 }
